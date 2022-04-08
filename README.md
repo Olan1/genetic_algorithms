@@ -51,8 +51,6 @@ from the existing generation, and finally a solve function which evolve the
 population over a specified number of generations, returning a list containing
 the population instance for each generation.
 
-The functionality of these classes will be demonstrated and tested.
-
 ## the_travelling_salesman
 
 This programme will implement a genetic algorithm that will be used to solve
@@ -87,5 +85,3 @@ number of Routes, or chromosomes, in the population. In the class constructor,
 a list of Routes (chromosomes) will be initialised and stored. This class will
 override the Population getOptimumFitness function to determine the fitness of
 a sorted route.
-
-The functionality of these classes will be demonstrated and tested below.
