@@ -52,3 +52,36 @@ the population instance for each generation.
 The functionality of these classes will be demonstrated and tested.
 
 ## the_travelling_salesman
+
+This programme will implement a genetic algorithm that will be used to solve
+the Travelling Salesman Problem. The Travelling Salesman Problem is as follows:
+Given a list of cities and the distances between each pair of cities, what is
+the shortest route that can be taken so that each city is visited once?
+
+This programme will consist of 3 classes.
+
+The first class, City, represents a single gene. It will take a name, an x and
+a y coordinate as arguments which will all be stored as instance variables
+using the class constructor. This class will inherit from the Gene class in the
+GA_number_sort file. A description of the Gene class can be found in this file. 
+
+The second class, Route, represents a group of City objects, or genes. This
+class will inherit from the Chromosome class in the GA_number_sort file, a
+description of which can be found in this file. This class will take the
+argument randomised, a boolean which determines whether the list of genes is
+shuffled or not. The class constructor will create a list of City instances
+with a specific name, x and y coordinates using a provided dictionary within
+its constructor function. This class will override the Chromosome getFitness
+function to determine the fitness of each route. This class will also have a
+function getDistances which will calculate the distances between city pairs.
+
+The third class, RoutePopulation, contains a group of Routes. This represents
+the population of chromosomes in the genetic algorithm. This class will inherit
+from the Population class in the GA_number_sort file, a description of which
+can be found in this file. This class will take the argument N, which is the
+number of Routes, or chromosomes, in the population. In the class constructor,
+a list of Routes (chromosomes) will be initialised and stored. This class will
+override the Population getOptimumFitness function to determine the fitness of
+a sorted route.
+
+The functionality of these classes will be demonstrated and tested.
