@@ -16,7 +16,9 @@ This programme will consist of 3 classes.
 The first class, City, represents a single gene. It will take a name, an x and
 a y coordinate as arguments which will all be stored as instance variables
 using the class constructor. This class will inherit from the Gene class in the
-GA_number_sort file. A description of the Gene class can be found in this file. 
+GA_number_sort file. A description of the Gene class can be found in this file.
+The sub magic method will be overloaded to calculate the distance between 2
+cities.
 
 The second class, Route, represents a group of City objects, or genes. This
 class will inherit from the Chromosome class in the GA_number_sort file, a
@@ -26,7 +28,7 @@ shuffled or not. The class constructor will create a list of City instances
 with a specific name, x and y coordinates using a provided dictionary within
 its constructor function. This class will override the Chromosome getFitness
 function to determine the fitness of each route. This class will also have a
-function getDistances which will calculate the distances between city pairs.
+function getDistances which will calculate the distances between each city pair.
 
 The third class, RoutePopulation, contains a group of Routes. This represents
 the population of chromosomes in the genetic algorithm. This class will inherit
@@ -52,7 +54,7 @@ class City(Gene):
     A class used to represent a city. Each City instance will be a gene in the
     genetic algorithm. The city object will have a name, an x and a y
     coordinate representing its latitudal and longitudal coordinates. The City
-    class inherits from the Gene class from the GA_number_sort
+    class inherits from the Gene class from the GA_number_sort.
     file.
 
     ...
@@ -78,6 +80,12 @@ class City(Gene):
     y : TYPE : int/float
         DESCRIPTION: Optional -> Default is 0
                      The longitudal coordinate of the City
+    
+    Methods
+    -------
+    __sub__(other)
+        DESCRIPTION: Overload sub magic method to calculate the distance
+                     between 2 cities.
     """
     
     def __init__(self, name, x = 0, y = 0):
@@ -103,6 +111,29 @@ class City(Gene):
         # Store x and y-coordinates as instance variables
         self.x = x
         self.y = y
+    
+    def __sub__(self, other):
+        """
+        Overload the sub magic method to calculate the distance between two
+        cities
+
+        ...
+        
+        Parameters
+        ----------
+        ther : TYPE : object
+            DESCRIPTION: Instance of City
+
+        Returns
+        -------
+        TYPE - distance
+            DESCRIPTION - Distance between two cities
+        """
+        # Calculate distance between city pair using the pythagorean theorem
+        # R^2 = (x2 - x1)^2 + (y2 - y1)^2 => R = sqrt((x2 - x1)^2 + (y2 - y1)^2)
+        distance = np.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
+        # Return calculated distance between 2 city
+        return distance
 
 
 class Route(Chromosome):
@@ -137,8 +168,9 @@ class Route(Chromosome):
     getFitness()
         DESCRIPTION: Calculate the fitness of the Route instance
     getDistances()
-        DESCRIPTION: Calculate the distances between city pairs
+        DESCRIPTION: Calculate the distances between each city pair
     """
+    
     def __init__(self, randomised = True):
         """
         Parameters
@@ -190,27 +222,24 @@ class Route(Chromosome):
         # Calculate the distances between each City pair
         distances = self.getDistances()
         # Calculate the absolute distance between all cities
-        fitness = sum([abs(distances[i] - distances[i-1]) for i in range(len(distances)) if i > 0])
+        fitness = sum([abs(distance) for distance in distances])
         # Return fitness
         return fitness
     
     def getDistances(self):
         """
-        Calculate the distances between city pairs
+        Calculate the distances between each city pair
 
         ...
 
         Returns
         -------
         TYPE - list
-            DESCRIPTION - Distances between city pairs
+            DESCRIPTION - Distances between each city pair
         """
-        # Calculate distances between city pairs using the pythagorean theorem
-        # R^2 = (x2 - x1)^2 + (y2 - y1)^2 => R = sqrt((x2 - x1)^2 + (y2 - y1)^2)
-        distances = [np.sqrt((self.genes[i].x - self.genes[i-1].x)**2
-                             + (self.genes[i].y - self.genes[i-1].y)**2)
-                     for i in range(len(self.genes)) if i > 0]
-        # Return calculated adjacent city distances
+        # Calculate distances between each city pair
+        distances = [gene - self.genes[i-1] for i, gene in enumerate(self.genes) if i > 0]
+        # Return calculated city pair distances
         return distances
 
 
@@ -248,6 +277,7 @@ class RoutePopulation(Population):
         DESCRIPTION: Calculate the fitness of a sorted chromosome, i.e. the
                      shortest route
     """
+    
     def __init__(self, N = 10):
         """
         Parameters
@@ -317,7 +347,10 @@ if __name__ == '__main__':
     # Test eq operator and print to console
     print(f'City 1 == City 2: {city1 == city2}')
     print(f'City 2 == City 3: {city2 == city3}')
-    print(f'City 1 == City 3: {city1 == city3}\n\n')
+    print(f'City 1 == City 3: {city1 == city3}\n')
+    
+    # Test sub operator and print to console
+    print(f'City 1 - 2 City 2: {city1 - city2}\n\n')
     
     
     # Route class tests
@@ -348,7 +381,7 @@ if __name__ == '__main__':
     
     # Test crossover functionality
     print(f'route_unshuffled + route_unshuffled = {route_unshuffled + route_unshuffled}\n')
-    print(f'route_unshuffled + route_shuffled = {route_unshuffled + route_shuffled}\n')
+    print(f'route_unshuffled + route_shuffled = {route_unshuffled + route_shuffled}\n')\
     
     # Test contains functionality
     dublin = City('Dublin', 0, 0)
