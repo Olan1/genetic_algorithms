@@ -12,8 +12,9 @@ of unique integers and will consist of 3 classes.
 The first class, Gene, represents a single gene. It will take a single value as
 an argument which will be stored as that genes value using the class
 constructor. This class will overload the str magic method to return the genes
-value, and the eq magic method to determine if the values of 2 different genes
-equate. The gene class will also contain a method which returns the
+value, the eq magic method to determine if the values of 2 different genes
+equate, and the sub magic method to determine the value of one gene subtracted
+from the other. The gene class will also contain a method which returns the
 genes value.
 
 The second class, Chromosome, represents a group of genes. This class will take
@@ -152,6 +153,27 @@ class Gene:
         """
         # Return the value of Gene instance
         return self.value
+    
+    def __sub__(self, other):
+        """
+        Overload the subtraction magic method to deduct the value of one gene
+        object from another
+
+        ...
+
+        Parameters
+        ----------
+        other : TYPE : object
+            DESCRIPTION: Instance of Gene class
+
+        Returns
+        -------
+        TYPE - int
+            DESCRIPTION - The value of one Gene instance subtracted from the
+                          other
+        """
+        # Deduct value of one Gene instance from the other and return new value
+        return self.value - other.value
 
 
 class Chromosome:
@@ -424,7 +446,7 @@ class Chromosome:
             if i == 0:
                 continue
             # Calculate the absolute difference between the adjacent genes
-            diff = abs(gene.value - self.genes[i-1].value)
+            diff = abs(gene - self.genes[i-1])
             # Increment the fitness by the difference
             fitness += diff
         # Return the fitness
