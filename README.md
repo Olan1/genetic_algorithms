@@ -7,14 +7,16 @@ than traditional methods. This decrease in time however involves a trade-off
 with accuracy and/or precision, leading to a near-optimal solution.
 
 ## GA_number_sort
+
 This programme will implement a genetic algorithm that will be used to sort a
 list of unique integers and will consist of 3 classes.
 
 The first class, Gene, represents a single gene. It will take a single value as
 an argument which will be stored as that genes value using the class
 constructor. This class will overload the str magic method to return the genes
-value, and the eq magic method to determine if the values of 2 different genes
-equate. The gene class will also contain a method which returns the
+value, the eq magic method to determine if the values of 2 different genes
+equate, and the sub magic method to determine the value of one gene subtracted
+from the other. The gene class will also contain a method which returns the
 genes value.
 
 The second class, Chromosome, represents a group of genes. This class will take
