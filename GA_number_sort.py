@@ -66,7 +66,7 @@ class Gene:
 
     Args
     ----------
-    val : TYPE : int
+    num : TYPE : int
         DESCRIPTION: Optional -> Default is 1
                      The numerical value of the gene
 
@@ -88,11 +88,11 @@ class Gene:
         DESCRIPTION: Get the value of the Gene instance
     """
 
-    def __init__(self, val = 1):
+    def __init__(self, num = 1):
         """
         Parameters
         ----------
-        val : TYPE : int
+        num : TYPE : int
             DESCRIPTION: Optional -> Default is 1
                          The numerical value of the gene
 
@@ -101,8 +101,8 @@ class Gene:
         None.
 
         """
-        # Initialise instance variable value to equal provided val argument
-        self.value = val
+        # Initialise instance variable value to equal provided num argument
+        self.value = num
 
     def __eq__(self, other):
         """
