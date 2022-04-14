@@ -16,15 +16,15 @@ This programme will consist of 3 classes.
 The first class, City, represents a single gene. It will take a name, an x and
 a y coordinate as arguments which will all be stored as instance variables
 using the class constructor. This class will inherit from the Gene class in the
-GA_number_sort file. A description of the Gene class can be found in this file.
-The sub magic method will be overloaded to calculate the distance between 2
-cities.
+Olan_Barron_Week_4_Assignment file. A description of the Gene class can be
+found in this file. The sub magic method will be overloaded to calculate the
+distance between 2 cities.
 
 The second class, Route, represents a group of City objects, or genes. This
-class will inherit from the Chromosome class in the GA_number_sort file, a
-description of which can be found in this file. This class will take the
-argument randomised, a boolean which determines whether the list of genes is
-shuffled or not. The class constructor will create a list of City instances
+class will inherit from the Chromosome class in the Olan_Barron_Week_4_Assignment
+file, a description of which can be found in this file. This class will take
+the argument randomised, a boolean which determines whether the list of genes
+is shuffled or not. The class constructor will create a list of City instances
 with a specific name, x and y coordinates using a provided dictionary within
 its constructor function. This class will override the Chromosome getFitness
 function to determine the fitness of each route. This class will also have a
@@ -32,18 +32,18 @@ function getDistances which will calculate the distances between each city pair.
 
 The third class, RoutePopulation, contains a group of Routes. This represents
 the population of chromosomes in the genetic algorithm. This class will inherit
-from the Population class in the GA_number_sort file, a description of which
-can be found in this file. This class will take the argument N, which is the
-number of Routes, or chromosomes, in the population. In the class constructor,
-a list of Routes (chromosomes) will be initialised and stored. This class will
-override the Population getOptimumFitness function to determine the fitness of
-a sorted route.
+from the Population class in the Olan_Barron_Week_4_Assignment file, a
+description of which can be found in this file. This class will take the
+argument N, which is the number of Routes, or chromosomes, in the population.
+In the class constructor, a list of Routes (chromosomes) will be initialised
+and stored. This class will override the Population getOptimumFitness function
+to determine the fitness of a sorted route.
 
 The functionality of these classes will be demonstrated and tested below.
 """
 
 # Import libraries/modules
-from GA_number_sort import Gene, Chromosome, Population
+from Olan_Barron_Week_4_Assignment import Gene, Chromosome, Population
 import numpy as np
 from matplotlib import pyplot as plt
 from itertools import permutations
@@ -54,7 +54,7 @@ class City(Gene):
     A class used to represent a city. Each City instance will be a gene in the
     genetic algorithm. The city object will have a name, an x and a y
     coordinate representing its latitudal and longitudal coordinates. The City
-    class inherits from the Gene class from the GA_number_sort.
+    class inherits from the Gene class from the Olan_Barron_Week_4_Assignment
     file.
 
     ...
@@ -142,7 +142,7 @@ class Route(Chromosome):
     algorithm. Each route contains a list of City objects (genes). Each City
     object has a unique value (name), and an x and y coordinate corresponding
     to its latitudal and longitudal coordinates. The Route class inherits from
-    the Chromosome class from the GA_number_sort file.
+    the Chromosome class from the Olan_Barron_Week_4_Assignment file.
 
     ...
 
@@ -250,7 +250,7 @@ class RoutePopulation(Population):
     list of Route objects. Each Route instance is composed of a list
     of City objects. Each City object has a unique name value, an x and y
     coordinate. The RoutePopulation class inherits from the Population class
-    from the GA_number_sort file.
+    from the Olan_Barron_Week_4_Assignment file.
 
     ...
 
@@ -270,6 +270,8 @@ class RoutePopulation(Population):
                      chromosome
     chromosomes : TYPE : List
         DESCRIPTION: A list of N Route objects
+    optimalfitness : TYPE : float
+        DESCRIPTION: The fitness of a sorted chromosome
     
     Methods
     -------
@@ -297,6 +299,8 @@ class RoutePopulation(Population):
         self.chromosometype = Route
         # Initialise list of Route objects
         self.chromosomes = [self.chromosometype() for i in range(N)]
+        # Store optimum fitness as an instance variable
+        self.optimumfitness = self.getOptimumFitness()
     
     def getOptimumFitness(self):
         """
@@ -311,21 +315,22 @@ class RoutePopulation(Population):
         """
         # Calculate every possible permutation of routes and store as a list
         all_permutations = list(permutations(Route().genes))
-        # Initialise a new RoutePopulation
-        population = RoutePopulation()
-        # Initialise the populations list of chromosomes to be an empty list
-        population.chromosomes = []
-        # Iterate through all permutations of routes
-        for i, permutation in enumerate(all_permutations):
-            # Create of population of equal size to the number of permutations
-            population.chromosomes.append(Route())
-            # Set the genes (cities) of each route equal to each permutation
-            population.chromosomes[i].genes = list(permutation)
-        # Determine the fittest route out of every permutation
-        fittest = population.getFittest(population.chromosomes)
-        # Calculate optimum fitness and return
-        optimum_fitness = fittest.getFitness()
-        return optimum_fitness
+        # Initialise an instance of a Route()
+        route = Route()
+        # Initialise optimal_fitness variable to equal the route fitness
+        optimal_fitness = route.getFitness()
+        # Iterate through all permutations
+        for permutation in all_permutations:
+            # Update the routes genes to equal the current permutation
+            route.genes = list(permutation)
+            # Get the fitness of the current route
+            route_fitness = route.getFitness()
+            # Check if the current route is fitter than the optmal_fitness
+            if route_fitness < optimal_fitness:
+                # If fitter, set as the new optimal_fitness
+                optimal_fitness = route_fitness
+        # Return the optimal fitness
+        return optimal_fitness
 
 
 # Only run the following code if running the file directly
@@ -394,23 +399,22 @@ if __name__ == '__main__':
     print('############### RoutePopulation class tests ###############\n')
     
     # Initialise route population and print to console
-    route_pop = RoutePopulation(10)
-    print(f'Route population:\n{route_pop}')
+    population = RoutePopulation()
+    print(f'Route population:\n{population}')
     
     # Test getFittest() function
-    print(f'Fittest route: {route_pop.getFittest(route_pop.chromosomes)}\n')
+    print(f'Fittest route: {population.getFittest(population.chromosomes)}\n')
     
     # Test tournamentSelect() function
-    print(f'Tournament select result: {route_pop.tournamentSelect()}\n')
+    print(f'Tournament select result: {population.tournamentSelect()}\n')
     
     # Test evolve() function
-    print(f'Evolve the route population 1 generation:\n{route_pop.evolve()}')
+    print(f'Evolve the route population 1 generation:\n{population.evolve()}')
     
     # Test getOptimumFitness() function
-    print(f'Fitness of a sorted route: {route_pop.getOptimumFitness()}\n')
+    print(f'Fitness of a sorted route: {population.optimumfitness}\n')
     
     # Test / demonstrate solve() function
-    population = RoutePopulation()
     # Specify number of generations to run simulation
     generations = 100
     # Specify mutation rate
