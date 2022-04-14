@@ -513,6 +513,8 @@ class Population:
                      chromosome
     chromosomes : TYPE : List
         DESCRIPTION: A list of N Chromosome objects
+    optimalfitness : TYPE : float
+        DESCRIPTION: The fitness of a sorted chromosome
 
     Methods
     -------
@@ -562,6 +564,8 @@ class Population:
         self.genetype = Gene
         # Initialise list of Chromosome objects
         self.chromosomes = [self.chromosometype(length) for i in range(N)]
+        # Store optimum fitness as an instance variable
+        self.optimumfitness = self.getOptimumFitness()
 
     def __str__(self):
         """
@@ -722,8 +726,6 @@ class Population:
         """
         # Initialise an empty list to store each generations population
         pop_evolution = []
-        # Calculate and store optimal fitness as a variable
-        optimal_fitness = self.getOptimumFitness()
         # Iterate through each generation
         for i in range(generations):
             # Create a new generation population of chromosomes
@@ -737,7 +739,7 @@ class Population:
             # Get the fitness of the fittest chromosome
             fitness = fittest.getFitness()
             # If the fittest chromosome fitness is equal to the optimal fitness
-            if fitness == optimal_fitness:
+            if fitness <= self.optimumfitness:
                 # Return the list of generations
                 return pop_evolution
         # Return the list of generations
